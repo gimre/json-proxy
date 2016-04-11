@@ -1,0 +1,30 @@
+{
+  "name": "json-proxy",
+  "version": "1.0.0",
+  "description": "A simple proxy that understands JSON and obfuscates all properties, while preserving structure",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gimre/json-proxy.git"
+  },
+  "keywords": [
+    "json",
+    "proxy",
+    "koa"
+  ],
+  "author": "Gabriel Imre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gimre/json-proxy/issues"
+  },
+  "homepage": "https://github.com/gimre/json-proxy#readme",
+  "dependencies": {
+    "electrolyte": "^0.2.0",
+    "koa": "^1.2.0",
+    "koa-body": "^1.4.0",
+    "koa-pixie-proxy": "^1.0.7"
+  }
+}
