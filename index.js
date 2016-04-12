@@ -8,7 +8,10 @@ ioc.use( ioc.node( './' ) )
 const app     = ioc.create( 'koa' )( )
 const koaBody = ioc.create( 'koa-body' )
 const proxy   = ioc.create( 'koa-pixie-proxy' )( {
-    host: 'https://httpbin.org'
+    host: 'http://dev.services.aqr.com/',
+    request: {
+        followRedirect: false
+    }
 } )
 const {
     decodeJSON, encodeJSON
@@ -19,14 +22,18 @@ app.use( koaBody( ) )
 
 app.use( function* impersonateHost( next ) {
     const { req } = this
-    const { body, headers } = this.request
+    const { body, headers, type } = this.request
 
-    if( Object.keys( body ).length ) {
-        req.body = decodeJSON( body )
+    if( type === 'application/json' ) {
+        if( Object.keys( body ).length ) {
+            req.body = decodeJSON( body )
+        }
     }
 
     req.headers = Object.assign( { }, headers, {
-        host: 'httpbin.org'
+        host: /^localhost/.test( headers.host ) ?
+            'dev.services.aqr.com':
+            headers.host
     } )
 
     yield next
@@ -35,7 +42,9 @@ app.use( function* impersonateHost( next ) {
 app.use( proxy( ) )
 
 app.use( function* obfuscateJson( next ) {
-    this.body = encodeJSON( this.body )
+    if( this.type === 'application/json' ) {
+        this.body = encodeJSON( this.body )
+    }
     yield next
 } )
 
